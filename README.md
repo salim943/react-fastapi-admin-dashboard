@@ -13,4 +13,4 @@ for beckend
 <br/><br/><br/><br/>
 ![Alt Text](https://github.com/salim943/react-fastapi-admin-dashboard/blob/main/todos.png)
 <br/><br/><br/><br/>
-![Alt Text](https://github.com/salim943/react-fastapi-admin-dashboard/blob/main/todo_with-data.png)
+![Alt Text](https://github.com/salim943/react-fastapi-admin-dashboard/blob/main/todo_with_data.png)

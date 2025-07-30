@@ -11,13 +11,17 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
 
+from fastapi import status
+from pydantic import BaseModel
+from typing import List
+import uuid
 # Initialize FastAPI app
 app = FastAPI()
 
 # Enable CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -26,6 +30,9 @@ app.add_middleware(
 # Create tables
 models.Base.metadata.create_all(bind=engine)
 
+def get_current_user_role():
+    return "admin"  # Replace with actual role logic
+    
 # Dependency to get DB session
 def get_db():
     db = SessionLocal()
@@ -44,9 +51,7 @@ def insert_initial_todos(db: Session):
 
     # Default todos to add
     default_todos = [
-        schemas.TodoCreate(title="Buy groceries", description="Get milk, eggs, and bread."),
-        schemas.TodoCreate(title="Read a book", description="Finish reading the book 'Atomic Habits'."),
-        schemas.TodoCreate(title="Exercise", description="Go for a 30-minute run.")
+        schemas.TodoCreate(title="Diabetes", description="Regular Checkup")
     ]
 
     # Insert each todo if it doesn't already exist
@@ -152,6 +157,12 @@ def admin_insert_user_with_todos(
     }
 
 
+@app.get("/admin/users_with_todos", response_model=List[schemas.UserWithTodos])
+def get_users_with_todos(
+    db: Session = Depends(get_db),
+    current_admin: str = Depends(get_current_admin)
+):
+    return crud.get_all_users_with_todos(db)
 
 # Define the router
 router = APIRouter()

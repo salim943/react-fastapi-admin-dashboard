@@ -41,7 +41,27 @@ def create_user_todo(db:Session, todo:schemas.TodoCreate, user_id : int):
 
 def get_user_todo_by_title(db: Session, user_id: int, title: str):
     return db.query(models.Todo).filter(models.Todo.owner_id == user_id, models.Todo.title == title).first()
-# NOTE :
-# - add that instance object to your database session.
-# - commit the changes to the database (so that they are saved).
-# - refresh your instance (so that it contains any new data from the database, like the generated ID).
+
+
+def get_all_users_with_todos(db: Session):
+    users = db.query(models.User).all()
+    return [
+        schemas.UserWithTodos(
+            user=schemas.UserOut(
+                id=user.id,
+                name=user.name,
+                email=user.email,
+                age=user.age
+            ),
+            todos=[
+                schemas.TodoOut(
+                    id=todo.id,
+                    title=todo.title,
+                    description=todo.description
+                )
+                for todo in user.todos
+            ]
+        )
+        for user in users
+    ]
+

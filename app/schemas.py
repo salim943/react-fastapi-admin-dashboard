@@ -37,4 +37,31 @@ class User(UserBase):
         orm_mode = True  # This enables the ORM to work with Pydantic models
 
 
-# NOTE: This is just like serializer.py in Django, with the same structure
+from typing import Optional
+
+class Todo(BaseModel):
+    id: int
+    title: str
+    description: str
+    owner_id: Optional[int] = None  # ✅ Optional
+    
+class UserOut(BaseModel):
+    id: int
+    name: str
+    email: str
+    age: int
+
+    class Config:
+        orm_mode = True
+        
+class TodoOut(BaseModel):
+    id: int
+    title: str
+    description: str
+
+    class Config:
+        orm_mode = True
+
+class UserWithTodos(BaseModel):
+    user: UserOut  # assuming you already have UserOut defined
+    todos: List[TodoOut]

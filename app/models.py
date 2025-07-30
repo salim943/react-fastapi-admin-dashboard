@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship
 from .database import Base
 
 class User(Base):
-    __tablename__ = "users"
+    __tablename__ = "users0"
     id = Column(Integer,primary_key=True,index=True)
     name = Column(String(255),index=True)
     age = Column(Integer, index=True)
@@ -15,10 +15,10 @@ class User(Base):
 
 
 class Todo(Base):
-    __tablename__ = "todos"
+    __tablename__ = "todos0"
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String(255), index=True)
     description = Column(String(255), index=True)
-    owner_id = Column(Integer, ForeignKey("users.id"))
+    owner_id = Column(Integer, ForeignKey("users0.id"))
 
     owner = relationship("User",back_populates="todos")
